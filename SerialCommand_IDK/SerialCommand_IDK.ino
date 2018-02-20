@@ -1,5 +1,5 @@
-String command, key, info;
-int x = 50, y = 50, tfreq = 1000;
+String command, key, info, buffer;
+int x = 50, y = 50, freq = 1000;
 
 void setup(){
 
@@ -8,10 +8,11 @@ void setup(){
 }
 
 void loop(){
-  
+  //Serial.println(getconfig());
   command = "";
   key = "";
-  
+  buffer = "";
+
   if(Serial.available()){
 
     command = Serial.readString();
@@ -31,24 +32,29 @@ void loop(){
   if(command == "gridy"){
     while(key != "check"){
       Serial.println("Y\n");
-      if(Serial.available()){
-        key = Serial.readString();
+      while(Serial.available()>0){
+          int inChar = Serial.read();
+          if(isDigit(inChar)){
+            buffer += (char)inChar;
+          }
+          if(inChar == '\n'){
+              y = buffer.toInt();
+              Serial.println(buffer.toInt());
+          }
+        }
       }
-      y = key.toInt();
     }
   }
 
   if(command == "info"){
     while(key != "check"){
-      Serial.println("Y\n");
       if(Serial.available()){
         key = Serial.readString();
       }
-      if(key == "conf"){
         Serial.println(getconfig());
+        delay(100);
     }
   }
-  
 }
 
 String getconfig(){
