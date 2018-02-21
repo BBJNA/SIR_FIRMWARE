@@ -5,6 +5,7 @@ from datetime import datetime
 
 i = 0
 sample = 0
+site = 0
 
 A=36
 B=38
@@ -23,7 +24,7 @@ gpio.output(C,0)
 
 spi = spidev.SpiDev()
 spi.open(0,0)
-spi.max_speed_hz = 15600000
+spi.max_speed_hz = 488000
 
 def TestInit():
     fileName = str(datetime.now()).split()
@@ -41,7 +42,7 @@ def AdcChannelRead(channel):
 ##    print(format(((channel>>2)&0x01), '02x')),
     
     data = spi.xfer2([0x00,0x00,0x00,0x00,0x00,0x00])
-    dataFile.write(str((data[0]<<8)+data[1])+","+str((data[2]<<8)+data[3])+","+str((data[4]<<8)+data[5])+" ")
+    dataFile.write(str((data[0]<<8)+data[1]).zfill(5)+","+str((data[2]<<8)+data[3]).zfill(5)+","+str((data[4]<<8)+data[5]).zfill(5)+" ")
 
 def getSiteConfig():
 
@@ -64,18 +65,26 @@ def getSiteConfig():
 siteConf = getSiteConfig()
 dataFile = open(TestInit(), "w")
 start = datetime.now()
-while sample < 10000:
-    
-    gpio.output(CONVST,True)
-    AdcChannelRead(0)
-    AdcChannelRead(1)
-    AdcChannelRead(2)
-    AdcChannelRead(3)
-    AdcChannelRead(4)
-    AdcChannelRead(5)
-    dataFile.write("\r\n")
-    gpio.output(CONVST,False)
-    sample += 1
+
+while site < 2500:
+
+    #sampleTime = str(datetime.now()).split()
+    #dataFile.write("Site" + str(site).zfill(4) + "," + sampleTime[1] + "\r\n")    
+
+    while sample < 10000:
+        gpio.output(CONVST,True)
+        AdcChannelRead(0)
+        #AdcChannelRead(1)
+        #AdcChannelRead(2)
+        #AdcChannelRead(3)
+        #AdcChannelRead(4)
+        #AdcChannelRead(5)
+        dataFile.write("\r\n")
+        gpio.output(CONVST,False)
+        sample += 1
+
+    sample = 0
+    site = 2500
 
 end = datetime.now()
 dataFile.close()
