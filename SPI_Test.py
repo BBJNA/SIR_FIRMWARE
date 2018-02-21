@@ -68,8 +68,8 @@ start = datetime.now()
 
 while site < 2500:
 
-    #sampleTime = str(datetime.now()).split()
-    #dataFile.write("Site" + str(site).zfill(4) + "," + sampleTime[1] + "\r\n")    
+    sampleTime = str(datetime.now()).split()
+    dataFile.write("Site" + str(site).zfill(4) + "," + sampleTime[1] + "\r\n")    
 
     while sample < 10000:
         gpio.output(CONVST,True)
@@ -83,6 +83,9 @@ while site < 2500:
         gpio.output(CONVST,False)
         sample += 1
 
+    sampleTime = str(datetime.now()).split()
+    dataFile.write("Site" + str(site).zfill(4) + "," + sampleTime[1] + "\r\n")
+    
     sample = 0
     site = 2500
 
