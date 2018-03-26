@@ -46,9 +46,9 @@ void loop(){
       }
       if(key == "conf"){
         Serial.println(getconfig());
+      }
     }
   }
-  
 }
 
 String getconfig(){
@@ -57,7 +57,7 @@ String getconfig(){
   info += " Gridy = ";
   info += y;
   info += " Freq = ";
-  info += freq;
+  info += tfreq;
   info += "\n";
   return info;
 }
